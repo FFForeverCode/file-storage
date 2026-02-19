@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	"encoding/gob"
 	"encoding/hex"
 	"file-storage/p2p"
 	"io"
@@ -10,6 +11,20 @@ import (
 
 const defaultRootFolderName = "default"
 
+func init() {
+	gob.Register(MessageStoreFile{})
+	gob.Register(MessageGetFile{})
+}
+
+type MessageGetFile struct {
+	ID  string
+	Key string
+}
+type MessageStoreFile struct {
+	ID   string
+	Key  string
+	Size int64
+}
 type FileServerOpts struct {
 	ID                string            //主键ID
 	EncKey            []byte            //key
@@ -72,3 +87,5 @@ func generateID() string {
 	return hex.EncodeToString(buf)
 
 }
+
+// todo 新增FileServer-GET方法、Store方法
